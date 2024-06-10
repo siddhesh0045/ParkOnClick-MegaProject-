@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f2f2f2;
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+
+        header {
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            padding: 10px;
+        }
+
+        nav {
+            background-color: #3498db;
+            padding: 10px;
+            text-align: center;
+        }
+
+        nav ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        nav ul li {
+            display: inline;
+            margin-right: 20px;
+        }
+
+        nav ul li a {
+            text-decoration: none;
+            color: #fff;
+            font-weight: bold;
+            font-size: 16px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            color: #333;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+
+        th, td {
+            padding: 10px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #3498db;
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Welcome, Admin!</h1>
+    </header>
+
+    <nav>
+        <ul>
+            <li><a href="#admin_home">Home</a></li>
+            <li><a href="#parking_spaces">Parking Spaces</a></li>
+            <li><a href="#revenue_info">Revenue Information</a></li>
+        </ul>
+    </nav>
+
+    <div class="container" id="admin_home">
+        <h2>Admin Dashboard</h2>
+        <p>Total Parking Spaces: 50</p>
+        <p>Total Revenue: $5000</p>
+        <p>Total Vehicles Visited: 200</p>
+        <!-- Add more content for the admin dashboard -->
+    </div>
+
+    <div class="container" id="parking_spaces">
+        <h2>Parking Spaces</h2>
+        <table>
+            <tr>
+                <th>Parking Space</th>
+                <th>Status</th>
+                <th>Usage History</th>
+            </tr>
+            <tr>
+                <td>A1</td>
+                <td>Occupied</td>
+                <td>User123 - 2 hours</td>
+            </tr>
+            <tr>
+                <td>A2</td>
+                <td>Available</td>
+                <td>N/A</td>
+            </tr>
+            <!-- Add more rows for each parking space -->
+        </table>
+        <!-- Add filters or sorting options here -->
+    </div>
+
+    <div class="container" id="revenue_info">
+        <h2>Revenue Information</h2>
+        <p>Total Revenue: $5000</p>
+        <p>Hourly Revenue: $2000</p>
+        <p>Daily Revenue: $3000</p>
+        <!-- Add charts or graphs for visualizing revenue trends -->
+        <!-- Add details on individual transactions or bookings contributing to the revenue -->
+    </div>
+
+</body>
+</html>

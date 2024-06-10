@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Slot Booking</title>
+    <link rel="stylesheet" href="/public/css/home.css" />
+    <script src="common.js" defer></script>
+
+    <style>
+      h1 {
+        text-align: center;
+      }
+
+      .heading {
+        background-color: #535875;
+        color: #0e023f;
+        font-weight: bolder;
+        font-size: xx-large;
+        padding: 21px;
+        margin: auto;
+      }
+
+      .container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .hall {
+        text-align: center;
+        flex: 1;
+      }
+
+      .seat {
+        width: 80px;
+        /* Adjust width as needed */
+        height: 60px;
+        /* Adjust height as needed */
+        margin: 5px;
+        display: inline-block;
+        background-color: #00ff00;
+        /* Default color for available seats */
+        cursor: pointer;
+        text-align: center;
+        line-height: 60px;
+        border: 2px solid #0b0b0b;
+        /* Border color */
+        box-shadow: 4px 4px 9px rgb(24, 24, 24);
+        /* Shadow effect */
+        border-radius: 5px;
+        font-weight: bold;
+        /* Make the font bold */
+        color: black;
+      }
+      .seat-clicked {
+        transform: scale(1);
+        /* Scale up slightly on hover */
+        box-shadow: 4px 6px 15px rgb(200, 185, 255);
+        color: #2600ff;
+        border: 2px solid #0b0042;
+        /* Add a deeper shadow on hover */
+        font-size: 120%;
+      } 
+
+      .selected {
+        background-color: grey;
+        /* Color for selected seats */
+        background-color: #33be00;
+      }
+
+      .reserved {
+        background-color: #ff0000;
+        /* Color for reserved seats */
+        pointer-events: none;
+        /* Disable click on reserved seats */
+      }
+
+      .modal {
+        display: none;
+        position: fixed;
+        z-index: 1;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.7);
+      }
+
+      .modal-content {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        background-color: #fff;
+        padding: 20px;
+        border: 1px solid #000;
+      }
+
+      .close {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        cursor: pointer;
+      }
+
+      .legend-container {
+        margin-top: 20px;
+        text-align: center;
+      }
+
+      .legend {
+        display: flex;
+        justify-content: center;
+      }
+
+      .legend-item {
+        display: flex;
+        align-items: center;
+        margin: 0 10px;
+      }
+
+      .legend-color {
+        width: 20px;
+        height: 20px;
+        margin-right: 5px;
+        border-radius: 50%;
+      }
+
+      .legend-text {
+        font-weight: bold;
+      }
+
+      .legend-text:nth-child(1) {
+        color: #00ff00;
+        /* Available color */
+      }
+
+      .legend-text:nth-child(2) {
+        color: grey;
+        /* Selected color */
+      }
+
+      .legend-text:nth-child(3) {
+        color: #ff0000;
+        /* Booked color */
+      }
+
+      .legend-container {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+      }
+
+      .legend {
+        display: flex;
+      }
+
+      .legend-item {
+        display: flex;
+        align-items: center;
+        margin-left: 10px;
+      }
+
+      .legend-color {
+        width: 20px;
+        height: 20px;
+        margin-right: 5px;
+      }
+
+      .UserButtons {
+        background-color: rgb(39, 59, 90);
+        color: white;
+        padding: 1%;
+        margin: 2%;
+        border: 3px solid grey;
+        border-radius: 20px;
+        cursor: pointer;
+      }
+
+      .time-selection label {
+        display: block;
+        margin-bottom: 5px;
+        font-weight: bold;
+      }
+
+      .time-selection input[type="time"] {
+        padding: 8px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        font-size: 16px;
+      }
+
+      .time-selection input[type="time"]:focus {
+        outline: none;
+        border-color: #007bff;
+        box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+      }
+
+      .selected {
+        background-color: #33be00;
+        /* Color for selected seats */
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Welcome to Parking</h1>
+    <!-- <button class="UserButtons" onclick="fetchAndUpdateSlotStatus()">Update Slot Status</button> -->
+    <div class="container">
+      <div class="hall">
+        <div id="seats">
+          <!-- Generate seat blocks dynamically -->
+        </div>
+      </div>
+      <!-- legend showing section -->
+    </div>
+
+    <div class="legend-container">
+      <div class="legend">
+        <div class="legend-item">
+          <div class="legend-color" style="background-color: #00ff00"></div>
+          <div>Available</div>
+        </div>
+        <div class="legend-item">
+          <div class="legend-color" style="background-color: #33be00"></div>
+          <div>Selected</div>
+        </div>
+        <div class="legend-item">
+          <div
+            class="legend-color"
+            style="background-color: rgb(252, 252, 252)"
+          ></div>
+          <div>Not Available</div>
+        </div>
+        <div class="legend-item">
+          <div class="legend-color" style="background-color: #ff0000"></div>
+          <div>Booked</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="time-selection">
+      <label for="startTime">Select Starting Time:</label>
+      <input type="time" id="startTime" name="startTime" required />
+      <br /><br />
+      <label for="endTime">Select Ending Time:</label>
+      <input type="time" id="endTime" name="endTime" required />
+    </div>
+
+    <button class="UserButtons" id="bookButton" onclick="bookSeats()">
+      Book Selected Slots
+    </button>
+
+    <button class="UserButtons" id="openImageButton">
+      Open Actual View Of Parking
+    </button>
+
+    <!-- Modal for displaying the image -->
+    <div id="imageModal" class="modal">
+      <div class="modal-content">
+        <span class="close" id="closeImageModal">&times;</span>
+        <img src="carParkingImage.png" alt="Image" width="400" height="300" />
+      </div>
+    </div>
+
+    <script>
+   
+      // Function to fetch slot status from Firebase and update slot colors
+      async function fetchAndUpdateSlotStatus() {
+        try {
+          const response = await fetch(`/fetchSlotStatus`); // Assuming you have an API endpoint to fetch slot status
+          const data = await response.json();
+          
+          // Loop through each slot and update its color based on the status
+          const slots = document.querySelectorAll(".seat");
+          slots.forEach((slot) => {
+            const slotNumber = slot.getAttribute("data-slot");
+            const status = data[slotNumber]; // Assuming data is returned as an object with slot numbers as keys
+              //
+            if (status === 0) {
+              slot.style.backgroundColor = "#FF0000"; // Free slot color 00FF00
+            } else if (status === 1 ) {
+              slot.style.backgroundColor = "#00FF00"; // Occupied slot color FF0000
+            } else if (status === 2) {
+              slot.style.backgroundColor = "#33be00"; // Occupied slot color
+            } else {
+              slot.style.backgroundColor = "#ffff"; // Default color for unknown status or null values
+            }
+          });
+        } catch (error) {
+          console.error("Error fetching slot status:", error);
+        }
+      }
+
+      // Generate seat blocks dynamically
+      function generateSeats() {
+        const seatsDiv = document.getElementById("seats");
+        const totalRows = 5;
+        const seatsPerRow = 10;
+        let slotNumber = 1;
+
+        for (let row = 1; row <= totalRows; row++) {
+          for (let seat = 1; seat <= seatsPerRow; seat++) {
+            const seatElement = document.createElement("div");
+            seatElement.className = "seat";
+            seatElement.setAttribute("data-slot", slotNumber);
+            seatElement.innerText = slotNumber;
+            seatElement.addEventListener("click", () => {
+              toggleSeat(seatElement);
+            });
+            seatsDiv.appendChild(seatElement);
+            slotNumber++;
+          }
+          seatsDiv.appendChild(document.createElement("br"));
+        }
+      }
+
+      // Call the function to generate seat blocks when the page loads
+      window.onload = function () {
+        generateSeats();
+        setInterval(fetchAndUpdateSlotStatus, 5000);
+        fetchAndUpdateSlotStatus(); // Fetch and update slot status
+      };
+
+      // Function to toggle seat status (available/selected)
+      function toggleSeat(seatElement) {
+        if (seatElement.classList.contains("reserved")) {
+          alert("This seat is already reserved!");
+        } else {
+          seatElement.classList.toggle("selected");
+        }
+      }
+
+      // Function to book selected seats
+
+      async function bookSeats() {
+        // Get selected seats and timing information
+        const selectedSeats = document.querySelectorAll(".seat.selected");
+        const startTime = document.getElementById("startTime").value;
+        const endTime = document.getElementById("endTime").value;
+
+        // Check if at least one seat is selected
+        if (selectedSeats.length === 0) {
+          alert("Please select at least one seat.");
+          return;
+        }
+
+        // Check if both start and end times are selected
+        if (!startTime || !endTime) {
+          alert("Please select both starting and ending times.");
+          return;
+        }
+
+        // Gather selected seat numbers
+        const seatNumbers = Array.from(selectedSeats).map((seat) =>
+          seat.getAttribute("data-slot")
+        );
+
+        try {
+          // Send booking request to the server
+          const response = await fetch("/bookSeats", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              seats: seatNumbers,
+              startTime,
+              endTime,
+            }),
+          });
+
+          const data = await response.json();
+
+          // Check if booking was successful
+          if (response.ok) {
+            // Redirect to the confirmation page with selected seat information
+            window.location.href = `/confirmation?seats=${seatNumbers.join(
+              ","
+            )}&startTime=${startTime}&endTime=${endTime}`;
+          } else {
+            alert(data.error); // Display error message
+          }
+
+          // Refresh slot status after booking
+          fetchAndUpdateSlotStatus();
+        } catch (error) {
+          console.error("Error booking seats:", error);
+          alert(
+            "An error occurred while booking seats. Please try again later."
+          );
+        }
+      }
+      // async function bookSeats() {
+      //             // Get selected seats and timing information
+      //             const selectedSeats = document.querySelectorAll(".seat.selected");
+      //             const startTime = document.getElementById("startTime").value;
+      //             const endTime = document.getElementById("endTime").value;
+
+      //             // Check if at least one seat is selected
+      //             if (selectedSeats.length === 0) {
+      //                 alert("Please select at least one seat.");
+      //                 return;
+      //             }
+
+      //             // Check if both start and end times are selected
+      //             if (!startTime || !endTime) {
+      //                 alert("Please select both starting and ending times.");
+      //                 return;
+      //             }
+
+      //             // Gather selected seat numbers
+      //             const seatNumbers = Array.from(selectedSeats).map(seat => seat.getAttribute("data-slot"));
+
+      //             // Construct query string with selected seat numbers, start time, and end time
+      //             const queryString = `seats=${seatNumbers.join(',')}&startTime=${startTime}&endTime=${endTime}`;
+
+      //             // Redirect to the confirmation page with the query string
+      //             window.location.href = `/confirmation?${queryString}`;
+      //         }
+
+      // Function to open the image modal
+
+      const openImageButton = document.getElementById("openImageButton");
+      const imageModal = document.getElementById("imageModal");
+      openImageButton.addEventListener("click", () => {
+        imageModal.style.display = "block";
+      });
+
+      // Function to close the image modal
+      const closeImageModal = document.getElementById("closeImageModal");
+      closeImageModal.addEventListener("click", () => {
+        imageModal.style.display = "none";
+      });
+      document.addEventListener('click', function(event) {
+            if (event.target.matches('.seat')) {
+                event.target.classList.toggle('seat-clicked');
+            }
+          });
+    </script>
+  </body>
+</html>

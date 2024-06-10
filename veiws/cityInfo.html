@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>City Information</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            padding: 20px;
+            background-color: #d2e4fc;
+        }
+        h1 {
+            text-align: center;
+            color: white;
+            border: 1px solid black;
+            padding: 2%;
+            background-color: rgb(39, 59, 90);
+            border-radius: 15px;
+        }
+        #forlebel {
+            font-weight: bolder;
+        }
+        .card {
+            margin: 10px;
+            width: 300px;
+            display: inline-block;
+        }
+        #searchButton {
+            background-color: rgb(39, 59, 90);
+        }
+        #searchButton:hover{
+            background-color: #0b2b40;
+        }
+    </style>
+</head>
+<body>
+    <h1>City Information</h1>
+    <br>
+    <div class="form-group">
+        <label id="forlebel" for="cityDropdown">Select a city:</label>
+        <br>
+        <select class="form-control" id="cityDropdown">
+            <option value="none">Select city where you want to find parking space</option>
+            <option value="Sangli">Sangli</option>
+            <option value="Kolhapur">Kolhapur</option>
+            <!-- Add more cities as needed -->
+        </select>
+    </div>
+    <br>
+    <button class="btn btn-primary" id="searchButton">Search</button>
+
+    <div id="cityInfo">
+        <!-- Cards will be displayed here -->
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        const cityData = {
+            "Sangli": [{
+                name: "SFC Mall Parking",
+                description: "Hurry up!! Confirm your slot now!",
+                link: "seatBooking.html"
+            },
+            {
+                name: "Ganesh Mandir Parking",
+                description: "Hurry up!! Confirm your slot now!",
+                link: "seatBooking2.html"
+            }],
+            // Add more cities and data as needed
+        };
+
+        async function getAvailableParking(location) {
+            try {
+                const response = await fetch(`/fetchCount?location=${location}`);
+                const data = await response.json();
+                document.getElementById(`${location}-countDisplay`).innerText = "Available Parking Slots : " + data.count;
+            } catch (error) {
+                console.error('Error fetching count:', error);
+            }
+        }
+
+        document.getElementById("searchButton").addEventListener("click", async function () {
+            const selectedCity = document.getElementById("cityDropdown").value;
+            const cityInfo = cityData[selectedCity];
+
+            if (cityInfo) {
+                let htmlContent = "";
+
+                for (let i = 0; i < cityInfo.length; i++) {
+                    htmlContent += `
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">${cityInfo[i].name}</h5>
+                                <p class="card-text">${cityInfo[i].description}</p>
+                                <button class="btn btn-info btn-sm" onclick="getAvailableParking('${cityInfo[i].name}')">Check Availability</button>
+                                <br>
+                                <p class="card-text" id="${cityInfo[i].name}-countDisplay"></p>
+                                <a href="${cityInfo[i].link}">Continue to ${cityInfo[i].name}</a>
+
+
+                            </div>
+                        </div>
+                    `;
+                }
+
+                document.getElementById("cityInfo").innerHTML = htmlContent;
+            } else {
+                alert("City not found in the database.");
+            }
+        });
+    </script>
+</body>
+</html>

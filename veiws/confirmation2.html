@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!-- Your meta tags and title -->
+    <!-- Your CSS styles -->
+    <style>
+        button {
+            padding: 10px 20px;
+            background-color: #333;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            margin-right: 10px;
+        }
+
+        h2 {
+
+            text-align: center;
+            color: rgb(3, 31, 82);
+            background-color: rgb(220, 221, 221);
+            border: 1px solid rgb(21, 0, 0);
+            border-radius: 3%;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: rgb(224, 246, 253);
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        button:hover {
+            background-color: #555;
+        }
+        #note {
+            font-weight: 100;
+        }
+    </style>
+</head>
+
+<body>
+
+
+    <div class="container">
+
+        <div class="details" id="pdfContent">
+            <h2>Selected Parking Details</h2>
+
+            <div class="details">
+                <label>Parking Area:</label>
+                <span id="parkingArea"></span>
+                <br>
+                <label>Parking Space:</label>
+                <span id="parkingSpace"></span>
+                <br>
+                <label>Total Time:</label>
+                <span id="totalTime"></span>
+            </div>
+            <br><br>
+            <!-- HTML code for user details -->
+            <div class="user-details">
+                <h2>User Information</h2>
+                <br>
+                <label>Final Cost in Rs:</lable>
+                    <span id="finalCost"></span>
+                    <br>
+                    <label>User Name:</label>
+                    <span id="userName"></span>
+                    <br>
+                    <label>Mobile No:</label>
+                    <span id="MobNo"></span>
+                    <br>
+                    <label>Email:</label>
+                    <span id="userEmail"></span>
+                    <br>
+                    <span id="note">Note: Cost will be added for extra time</span>
+                    <!-- Add more user details as needed -->
+            </div>
+
+
+        </div>
+        <br><br>
+        <button onclick="confirmBooking()">Confirm Booking</button>
+
+        <button onclick="downloadReceipt()">Download Receipt</button>
+
+    </div>
+
+    <script src="https://rawgit.com/eKoopmans/html2pdf/master/dist/html2pdf.bundle.js"></script>
+
+    <script>
+        // Function to fetch user information and update HTML elements
+        function fetchAndUpdateUserInfo() {
+            fetch('/api/user') // Fetch user info from API
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Failed to fetch user information');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    // Update HTML elements with user information
+                    document.getElementById("userName").textContent = data.name;
+                    document.getElementById("userEmail").textContent = data.email;
+                    document.getElementById("MobNo").textContent = data.mobno;
+
+                    // Add more lines to populate additional user details if needed
+                })
+                .catch(error => {
+                    console.error('Error fetching user information:', error);
+                });
+        }
+
+        // Function to populate parking details
+        function populateDetails() {
+            // Extract URL parameters
+            const params = new URLSearchParams(window.location.search);
+
+            // Populate parking details
+            document.getElementById("parkingArea").textContent = "SFC Mall"; // You can update this with your parking area name
+            document.getElementById("parkingSpace").textContent = params.get('seats');
+            document.getElementById("totalTime").textContent = params.get('startTime') + ' - ' + params.get('endTime');
+            const startTime = params.get('startTime');
+            const endTime = params.get('endTime');
+            const start = new Date(`01/01/2024 ${startTime}`);
+            const end = new Date(`01/01/2024 ${endTime}`);
+            const totalTimeInMinutes = Math.round((end - start) / 60000); // Convert milliseconds to minutes
+
+            // Update total time on the page
+            document.getElementById("totalTime").textContent = `${startTime} - ${endTime}`;
+
+            // Calculate final cost
+            const costPerMinute = 2;
+            const finalCost = totalTimeInMinutes * costPerMinute;
+
+            // Update final cost on the page
+            document.getElementById("finalCost").textContent = finalCost;
+        }
+
+        // Function to download receipt
+        function downloadReceipt() {
+            // Use html2pdf.js to generate a PDF from the selected content
+            var element = document.getElementById('pdfContent');
+            html2pdf(element);
+        }
+
+        // Function to confirm booking
+        async function confirmBooking() {
+
+            const seatNumbersString = getQueryVariable("seats"); // Assuming seatNumbersString is a string like "1,2,3"
+            const seatNumbers = seatNumbersString.split(',').map(num => parseInt(num, 10));
+
+            const startTime = getQueryVariable("startTime");
+            const endTime = getQueryVariable("endTime");
+            console.log(seatNumbers);
+            // You can now use seatNumbers, startTime, and endTime to make the API call
+            // Example API call:
+            try {
+                const response = await fetch("/bookSeatsConfirmation2", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        seats: seatNumbers, // Convert seatNumbers string to an array
+                        startTime,
+                        endTime
+                    })
+                });
+
+                const data = await response.json();
+                if (response.ok) {
+                    console.log("Confirmation working fine");
+                    window.location.href = '/thanks.html';
+
+                }
+                else {
+                    console.log("Confirmation not  working fine");
+                }
+                // Handle response accordingly
+            } catch (error) {
+                console.error('Error confirming booking:', error);
+                alert('Failed to confirm booking');
+            }
+        }
+
+
+
+
+
+
+
+        // Retrieve seat numbers from URL query parameters
+        function getQueryVariable(variable) {
+            const query = window.location.search.substring(1);
+            const vars = query.split("&");
+            for (let i = 0; i < vars.length; i++) {
+                const pair = vars[i].split("=");
+                if (pair[0] === variable) {
+                    return pair[1];
+                }
+            }
+            return null;
+        }
+        // Call functions when the page loads
+        window.onload = function () {
+            populateDetails(); // Populate parking details
+            fetchAndUpdateUserInfo();
+
+            // Fetch and update user information
+        };
+    </script>
+
+</body>
+
+</html>
