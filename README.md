@@ -46,13 +46,14 @@ This API acts as a communication layer, allowing authorized users to interact wi
 - logout
 
 ## Screenshots
-#### ![Home Page](public/Screenshots/home)
-#### ![About Page](public/Screenshots/about)
-#### ![About Page](public/Screenshots/about1)
-#### ![Login Page](public/Screenshots/login)
-#### ![ Search city Page](public/Screenshots/selectCity)
-#### ![Select slot Page](public/Screenshots/selectSlots)
-#### ![Receipt Page](public/Screenshots/receipt)
+#### ![Home Page](public/Screenshots/home.png "Home Page")
+#### ![About Page](public/Screenshots/about.png "About Page")
+#### ![About Page](public/Screenshots/about1.png "About Page")
+#### ![Login Page](public/Screenshots/login.png "Login Page")
+#### ![Team Page](public/Screenshots/team.png "About Team")
+#### ![ Search city Page](public/Screenshots/selectCity.png "Search For City Page")
+#### ![Select slot Page](public/Screenshots/selectSlots.png "Search for Slot Page")
+#### ![Receipt Page](public/Screenshots/receipt.png "Receipt")
 
 
 
