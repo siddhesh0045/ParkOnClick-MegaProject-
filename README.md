@@ -82,14 +82,13 @@ LiquidCrystal_I2C lcd(0x27, 16, 2);
 #include "addons/RTDBHelper.h" 
  
 // Insert your network credentials 
-#define WIFI_SSID "realme7" 
-#define WIFI_PASSWORD "04082002" 
+#define WIFI_SSID "your wifi name" 
+#define WIFI_PASSWORD "your wifi password" 
 // Insert Firebase project API Key 
-#define API_KEY "AIzaSyBeyulh93rke0bCEIfJx4cxxdi3DL88aMo" 
+#define API_KEY "insert here" 
  
 // Insert RTDB URLefine the RTDB URL */ 
-#define DATABASE_URL "https://testdata-1c6d3-default-rtdb.asia
-southeast1.firebasedatabase.app/"  
+#define DATABASE_URL "here"  
 #define ir_entry 19 
 #define servo_pin 23 
 //Define Firebase Data object 
