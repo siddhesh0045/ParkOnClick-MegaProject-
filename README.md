@@ -1,18 +1,18 @@
-# EasyPark System
+# ParkOnClick System
 
 ## 1. Introduction
 
-The EasyPark system addresses various challenges related to car parking, including controlling the number of cars inside the parking area, monitoring movements inside and outside the parking area, checking for available spaces, and ensuring a prebooking and easy revenue system. The project proposes the implementation of a microcontroller and web development-based API to provide a user-friendly tool for finding parking slots quickly and easily. This system is designed to be useful for maximum slots in overcrowded metropolitan cities, helping to minimize waiting time and redefine urban parking.
+The ParkOnClick system addresses various challenges related to car parking, including controlling the number of cars inside the parking area, monitoring movements inside and outside the parking area, checking for available spaces, and ensuring a prebooking and easy revenue system. The project proposes the implementation of a microcontroller and web development-based API to provide a user-friendly tool for finding parking slots quickly and easily. This system is designed to be useful for maximum slots in overcrowded metropolitan cities, helping to minimize waiting time and redefine urban parking.
 
 ## 2. Problem Description
 
-In crowded cities, the shortage of parking spaces and constant traffic jams are daily frustrations for residents and commuters. "ParkOnClick" steps in as a smart solution, making it easier to find parking and reducing city congestion, creating a smoother urban experience for all. This challenge necessitates an innovative solution like "ParkOnClick," which aims to revolutionize the urban parking experience. By integrating real-time data and smart technology, ParkOnClick seeks to reduce the chaos associated with parking, offering a more convenient, efficient, and stress-free solution for drivers while contributing to reduced congestion and an overall improvement in the quality of urban living.
+In crowded cities, the shortage of parking spaces and constant traffic jams are daily frustrations for residents and commuters. "ParkOnClick " steps in as a smart solution, making it easier to find parking and reducing city congestion, creating a smoother urban experience for all. This challenge necessitates an innovative solution like "ParkOnClick ," which aims to revolutionize the urban parking experience. By integrating real-time data and smart technology, ParkOnClick  seeks to reduce the chaos associated with parking, offering a more convenient, efficient, and stress-free solution for drivers while contributing to reduced congestion and an overall improvement in the quality of urban living.
 
 ## 3. Design Methodology
 
 ### 3.1 Overview
 
-The "ParkOnClick" project employs a user-friendly web application powered by Node.js and Express.js for seamless server-side logic. Firebase enhances the system with real-time updates, authentication, and push notifications. Smart sensors and IoT devices, integrated with ESP32, provide accurate data on parking space occupancy. Servo motors ensure precise control of physical elements, aiding navigation. GitHub and Git manage collaborative development, enabling version control and issue tracking. The combination of these technologies creates an innovative urban parking solution, enhancing efficiency, reducing congestion, and providing a streamlined experience for users.
+The "ParkOnClick " project employs a user-friendly web application powered by Node.js and Express.js for seamless server-side logic. Firebase enhances the system with real-time updates, authentication, and push notifications. Smart sensors and IoT devices, integrated with ESP32, provide accurate data on parking space occupancy. Servo motors ensure precise control of physical elements, aiding navigation. GitHub and Git manage collaborative development, enabling version control and issue tracking. The combination of these technologies creates an innovative urban parking solution, enhancing efficiency, reducing congestion, and providing a streamlined experience for users.
 
 ### 3.2 Components
 
@@ -23,7 +23,7 @@ The web server (Firebase) acts as a central hub for storing and managing real-ti
 - Communicates with the ESP32 to send control commands or receive updates.
 
 #### End User API
-This API acts as a communication layer, allowing authorized users to interact with the ParkOnClick system through the web server.
+This API acts as a communication layer, allowing authorized users to interact with the ParkOnClick  system through the web server.
 - Provides a secure way for authorized users (e.g., parking lot managers) to interact with the system.
 - Enables functionalities like viewing real-time parking data and managing parking reservations.
 
@@ -213,7 +213,7 @@ void loop(){
   // lcd.clear(); 
   lcd.setCursor(0, 0);               // Set the cursor to the first column 
 and first row 
-  lcd.print("ParkOnCLick");  
+  lcd.print("ParkOnClick ");  
   int ir1 = digitalRead(irSensorPin1); 
   int eni = digitalRead(ir_entry); 
   int ir2 = digitalRead(irSensorPin2); 
